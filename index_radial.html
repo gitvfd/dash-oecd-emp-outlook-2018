@@ -464,39 +464,39 @@ function highlightCountry(codeISO){
 		//Select the coutry bar in all of the charts
 		topicIDEmp="#Emp"+codeISO;
 		d3.selectAll(topicIDEmp)
-			.style("fill","#5E0084");
+			.style("fill","#ff3399");
 
 		topicIDUnemp="#Unemp"+codeISO;
 		d3.selectAll(topicIDUnemp)
-			.style("fill","#5E0084");
+			.style("fill","#ff3399");
 
 		topicIDBroadLabUnder="#BroadLabUnder"+codeISO;
 		d3.selectAll(topicIDBroadLabUnder)
-			.style("fill","#5E0084");
+			.style("fill","#ff3399");
 
 		topicIDEarnQual="#EarnQual"+codeISO;
 		d3.selectAll(topicIDEarnQual)
-			.style("fill","#5E0084");
+			.style("fill","#ff3399");
 
 		topicIDLabMarkSec="#LabMarkSec"+codeISO;
 		d3.selectAll(topicIDLabMarkSec)
-			.style("fill","#5E0084");
+			.style("fill","#ff3399");
 
 		topicIDJobStrain="#JobStrain"+codeISO;
 		d3.selectAll(topicIDJobStrain)
-			.style("fill","#5E0084");
+			.style("fill","#ff3399");
 
 		topicIDLowIncome="#LowIncome"+codeISO;
 		d3.selectAll(topicIDLowIncome)
-			.style("fill","#5E0084");
+			.style("fill","#ff3399");
 
 		topicIDGenderIneq="#GenderIneq"+codeISO;
 		d3.selectAll(topicIDGenderIneq)
-			.style("fill","#5E0084");
+			.style("fill","#ff3399");
 
 		topicIDEmplGap="#EmplGap"+codeISO;
 		d3.selectAll(topicIDEmplGap)
-			.style("fill","#5E0084");
+			.style("fill","#ff3399");
 
 	}
 }
@@ -764,7 +764,7 @@ function createRadial(topicSelected){
 				d3.select(this)
 				.style("fill",function (d) { 
 					if(d.ISO==selectedCou)
-	          			return "#5E0084";
+	          			return "#ff3399";
 
 	          		else if(d.Country=="OECD")
 	          			return "#0B1E2D";
@@ -887,7 +887,7 @@ function createRadial(topicSelected){
 				d3.select(this)
 				.style("fill",function (d) { 
 					if(d.ISO==selectedCou)
-	          			return "#5E0084";
+	          			return "#ff3399";
 
 	          		else if(d.Country=="OECD")
 	          			return "#0B1E2D";

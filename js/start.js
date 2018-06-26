@@ -28,7 +28,7 @@
       .attr("y",0)
       .attr("width",overallwidth)
       .attr("height",barHeight)
-      .attr("fill","#fec8d7")
+      .attr("fill","#ff3399")
       .attr("opacity",0.75)
       .attr("visibility","hidden");
 
