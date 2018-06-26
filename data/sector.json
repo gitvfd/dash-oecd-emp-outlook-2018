@@ -1,0 +1,14 @@
+[
+	{
+	   "Sector": "Quantity",
+	   "NumberInd":3
+	 },
+	{
+	   "Sector": "Quality",
+	   "NumberInd":3
+	 },
+	{
+	   "Sector": "Inclusiveness",
+	   "NumberInd":3
+	 }
+ ]

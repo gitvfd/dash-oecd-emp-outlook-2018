@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<!-- Inspired by https://bl.ocks.org/bricedev/8aaef92e64007f882267-->
+<meta charset="utf-8">
+<style type="text/css">
+body{
+	background:#EDF8F6;
+	margin-left: 5%;
+	margin-right:5%;
+}
+
+.title{
+	font:TheSerif;
+	font-size: 20px;
+	color:#8EA4B1;
+
+	margin-top:2px;
+	margin-bottom:1px;
+}
+.Explanation{
+clear: both; float: left; display: block; position: relative;
+	font:TheSerif;
+	font-size: 18px;
+	font-style:italic;
+	color:#575757;
+	margin-top:5px;
+	margin-bottom:10px;
+	width:100%;
+}
+
+
+.radial{
+    display: inline-block;
+	float:left;
+	font:TheSerif;
+	font-size: 18px;
+	color:#0297C9;
+	max-width: 33%
+}
+
+.metadata{
+    display: inline-block;
+	float:left;
+	font:TheSerif;
+	font-size: 18px;
+	color:#0297C9;
+	height:90px;
+}
+.sub{
+
+    display: block;
+	font:TheSerif;
+	font-style: italic;
+	font-size: 11px;
+	color:#575757;
+	max-width: 90%;
+}
+
+.def{
+
+    display: block;
+	float:left;
+	font:TheSerif;
+	font-size: 12px;
+	color:#7A7A7A;
+	max-width: 90%;
+}
+
+span{
+	display: block;
+}
+   
+.sector {
+clear: both; float: left; display: block; position: relative;
+font-family:TheSerif;
+font-size: 2vw;
+color:#8EA4B1;
+margin-top: :5px;
+
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #575757;
+  shape-rendering: crispEdges;
+}
+
+.axis text {
+  fill: #575757;
+  font-size: 9px;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+  display: none;
+}
+
+
+#toolbar{
+    display: inline-block;
+}
+
+.button{
+ min-width: 130px;
+  padding: 4px 5px;
+  cursor: pointer;
+  text-align: center;
+  font: 14px  TheSerif, Helvetica, Arial, sans-serif;
+  font-weight:400;
+  float:left;
+  margin: 2px 5px 2px 5px;
+  color:#464646;
+  border: 1px solid #e0e0e0;
+}
+
+
+
+.button.active {
+  background: #8EA4B1;
+  color: #fff;
+}
+
+.selector{
+	clear: both; float: left; display: block; position: relative;
+	font-family:TheSerif;
+	font-size:14px ;
+	font-weight: bold;
+	color: #5E0084;
+	margin-bottom: 10px
+
+}
+
+#source{
+	clear: both; float: left; display: block; position: relative;
+  
+  font:TheSerif;
+  font-style: normal;
+  font-size: 12px;
+  color:#575757;
+}
+.radialLabel{
+	font-size:0.65vw;
+}
+
+
+
+/* --- Tooltip --- */
+#countryTooltipSetUP {
+  position: absolute;
+  width: auto;
+  height: auto;
+  padding: 10px;
+  background-color: rgba(252,252,252,0.8);
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+  -webkit-box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
+  -moz-box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+  pointer-events: none;
+}
+
+#countryTooltipSetUP.hidden {
+  display: none;
+}
+
+#countryTooltipSetUP p {
+  margin: 0;
+  font-family: sans-serif;
+  font-size: 10px;
+  line-height: 12px;
+}
+
+#countryTooltip{
+  font-family: 'TheSerif', sans-serif;
+  font-size: 17px;
+}
+
+#indicTooltip{
+	font-family: 'TheSerif', sans-serif;
+  	font-size: 11px;
+}
+
+#valueTooltip{
+  font-size: 12px;
+}
+
+#evoTooltip{
+  font-size: 12px;
+}
+
+#imageTooltip{
+width:15px;
+height:15px;
+}
+
+@media screen and  (max-width: 800px) {
+.radial{
+    display: inline-block;
+	float:left;
+	font:TheSerif;
+	font-size: 18px;
+	color:#0297C9;
+	max-width: 100%
+}
+
+.radialLabel{
+	font-size:1.8vw;
+}
+
+.sector {
+clear: both; float: left; display: block; position: relative;
+font-family:TheSerif;
+font-size: 4vw;
+color:#8EA4B1;
+margin-top: :5px;
+
+}
+}
+
+</style>
+<body id="page">
+
+<div class="title">
+	Scoreboard of labour market performance 
+</div>
+<Br/>
+<div id="toolbar">
+<div class="button " id="comparison">Country position </div>
+<div class="button " id="table">Dashboard </div>
+<div class="button  active" id="radial">Infographic </div>
+</div>
+<Br/>
+<div class="selector">Highlight a country: &nbsp;
+<select id="dropDownButton" onchange="highlightCountry(this.value)";>
+  <option value="">-</option>
+	 <option value="ARG">Argentina</option>
+	 <option value="AUS" selected="selected" >Australia</option>
+	 <option value="AUT" >Austria</option>
+	 <option value="BEL" >Belgium</option>
+	 <option value="BRA" >Brazil</option>
+	 <option value="CAN" >Canada</option>
+	 <option value="CHL" >Chile</option>
+	 <option value="CHN" >China</option>
+	 <option value="COL" >Colombia</option>
+	 <option value="CRI" >Costa Rica</option>
+	 <option value="CZE" >Czech Republic</option>
+	 <option value="DNK" >Denmark</option>
+	 <option value="EST" >Estonia</option>
+	 <option value="FIN" >Finland</option>
+	 <option value="FRA" >France</option>
+	 <option value="DEU" >Germany</option>
+	 <option value="GRC" >Greece</option>
+	 <option value="HUN" >Hungary</option>
+	 <option value="ISL" >Iceland</option>
+	 <option value="IND" >India</option>
+	 <option value="IDN" >Indonesia</option>
+	 <option value="IRL" >Ireland</option>
+	 <option value="ISR" >Israel</option>
+	 <option value="ITA" >Italy</option>
+	 <option value="JPN" >Japan</option>
+	 <option value="KOR" >Korea</option>
+	 <option value="LVA" >Latvia</option>
+	 <option value="LTU" >Lithuania</option>
+	 <option value="LUX" >Luxembourg</option>
+	 <option value="MEX" >Mexico</option>
+	 <option value="NLD" >Netherlands</option>
+	 <option value="NZL" >New Zealand</option>
+	 <option value= "NOR">Norway</option>
+	 <option value="OECD" >OECD</option>
+	 <option value="POL" >Poland</option>
+	 <option value="PRT" >Portugal</option>
+	 <option value="RUS" >Russia</option>
+	 <option value="SAU" >Saudi Arabia</option>
+	 <option value="SVK" >Slovak Republic</option>
+	 <option value="SVN" >Slovenia</option>
+	 <option value="ZAF" >South Africa</option>
+	 <option value="ESP" >Spain</option>
+	 <option value="SWE" >Sweden</option>
+	 <option value="CHE" >Switzerland</option>
+	 <option value="TUR" >Turkey</option>
+	 <option value="GBR" >United Kingdom</option>
+	 <option value="USA" >United States</option>
+</select>
+</div>
+<Br/>
+<div class="Explanation">
+The lighter the shading for a country the worse it performs for the given indicators.
+</div>
+<Br/>
+<div class="sector" >
+	Quantity
+</div>
+<div class="sector" id="quantity">
+	<div class="radial">
+		<div class="metadata">Employment rate
+		<span class="sub">The higher the value the best the country performs</span>
+		<span class="def">Share of working-age population (20-64 years) in employment (%) (2016) </span>
+		</div>
+		<span id="Emp"></span>
+	</div>
+	<div class="radial" >
+		<div class="metadata">Unemployment rate 
+		<span class="sub">The higher the value the worse the country performs</span> 
+		<span class="def">Share of persons in the labour force (15-64 years) in unemployment (%) (2016)</span>
+		</div>
+		<span id="Unemp"></span>
+	</div>
+	<div class="radial" >
+		<div class="metadata">Broad labour underutilisation
+		<span class="sub">The higher the value the worse the country performs</span> 
+		<span class="def">Share of inactive, unemployed or involuntary part-timers (15-64) in population (%), excluding youth (15-29) in education and not in employment (2015)</span>
+		</div>
+		<span id="BroadLabUnder"></span>
+	</div>
+</div>
+<div class="sector" >
+	Quality
+</div>
+<div class="sector" id="quality">
+	<div class="radial" >
+		<div class="metadata">Earnings quality
+		<span class="sub">The higher the value the best the country performs</span> 
+		<span class="def">Gross hourly earnings in USD adjusted for inequality (2015)</span>
+		</div>
+		<span id="EarnQual"></span>
+	</div>
+	<div class="radial" >
+		<div class="metadata">Labour market insecurity
+		<span class="sub">The higher the value the worse the country performs</span> 
+		<span class="def">Expected monetary loss associated with becoming and staying unemployed as a share of previous earnings (%) (2016)</span>
+		</div>
+		<span id="LabMarkSec"></span>
+	</div>
+	<div class="radial" >
+		<div class="metadata">Job strain
+		<span class="sub">The higher the value the worse the country performs</span> 
+		<span class="def">Share of workers experiencing job strain (2015)</span>
+		</div>
+		<span id="JobStrain"></span>
+	</div>
+</div>
+<div class="sector" >
+	Inclusiveness
+</div>
+<div class="sector" id="inclusiveness">
+	<div class="radial" >
+		<div class="metadata">Low income rate
+		<span class="sub">The higher the value the worse the country performs</span> 
+		<span class="def">Share of working age persons (18-65 years) living with less than 50% of median equivalised household disposable income (2015)</span>
+		</div>
+		<span id="LowIncome"></span>
+	</div>
+	<div class="radial" >
+		<div class="metadata">Gender labour income gap
+		<span class="sub">The higher the value the worse the country performs</span> 
+		<span class="def">Difference between average annual labour income of men and women divided by average labour income of men (%) (2015)</span>
+		</div>
+		<span id="GenderIneq"></span>
+	</div>
+	<div class="radial" >
+		<div class="metadata">Employment gap for disadvantaged groups
+		<span class="sub">The higher the value the worse the country performs</span> 
+		<span class="def">Average employment gap as a percentage of the benchmark group (prime-age male workers) (2016)</span>
+		</div>
+		<span id="EmplGap"></span>
+	</div>
+</div>
+
+<Br/>
+<div id="source">For further details on definitions and sources, refer to Chapter 1 of the <a href="http://dx.doi.org/10.1787/empl_outlook-2018-en"target="_blank">OECD Employment Outlook 2018</a>.</div>
+<div id="source">Download the data <a href="http://www.oecd.org/employment/emp/Labour-market-performance-scoreboard.xlsx">here</a>.</div>
+<div id="countryTooltipSetUP" class="hidden">
+              <p><span id="countryTooltip">All</span></p><Br/>
+
+              <p><span id="indicTooltip">All</span></p>
+              <p><span id="valueTooltip">All</span></p><Br/>
+              <p><span id="evoTooltip">All</span></p>
+
+              <p><img id="imageTooltip" src="img/arrow-with-circle-down.png"></img></p><Br/>
+</div>
+</body>
+
+<script src="libs/d3.v4.min.js"></script>
+<script src="js/colorOpacityRadial.js"></script>
+<script type="text/javascript">
+
+var overallwidth=document.getElementById("page").offsetWidth;
+
+var width;
+
+if (overallwidth>700)
+	width = overallwidth/3;
+else
+	width = overallwidth;
+
+
+var barHeight = width / 3 ;
+
+var formatNumber = d3.format(".0f");
+
+
+var format= d3.format(",.1f");
+
+var colorScale = d3.scaleOrdinal()
+    .range(["#EDF8F6","#00B7B5","#EF9200","#00B26C"])
+    .domain(["","Quantity", "Quality","Inclusiveness"]);
+
+function pickSector(topicSelected){
+	if(topicSelected=="Emp" ||  topicSelected=="BroadLabUnder" || topicSelected=="Unemp" )
+		return "Quantity";
+	else if (topicSelected=="EarnQual" || topicSelected=="LabMarkSec" || topicSelected=="JobStrain" || topicSelected=="LongHours" )
+		return "Quality";
+	else
+		return "Inclusiveness";
+};
+
+
+function highlightCountry(codeISO){
+
+	d3.selectAll("path")
+		.filter(".Quality")
+				.style("fill","#EF9200");
+	
+	d3.selectAll("path")
+		.filter(".Quantity")
+				.style("fill","#00B7B5")
+	d3.selectAll("path")
+		.filter(".Inclusiveness")
+				.style("fill","#00B26C")
+
+	//Select the OECD bar in all of the charts
+	d3.selectAll("path")
+		.filter("#EmpOECD")
+				.style("fill","#0B1E2D");
+	d3.selectAll("path")
+		.filter("#UnempOECD")
+				.style("fill","#0B1E2D");
+	d3.selectAll("path")
+		.filter("#BroadLabUnderOECD")
+				.style("fill","#0B1E2D");
+	d3.selectAll("path")
+		.filter("#EarnQualOECD")
+				.style("fill","#0B1E2D");
+	d3.selectAll("path")
+		.filter("#LabMarkSecOECD")
+				.style("fill","#0B1E2D");
+	d3.selectAll("path")
+		.filter("#JobStrainOECD")
+				.style("fill","#0B1E2D");
+	d3.selectAll("path")
+		.filter("#LowIncomeOECD")
+				.style("fill","#0B1E2D");
+	d3.selectAll("path")
+		.filter("#GenderIneqOECD")
+				.style("fill","#0B1E2D");
+	d3.selectAll("path")
+		.filter("#EmplGapOECD")
+				.style("fill","#0B1E2D");
+	
+
+	if (codeISO !=""){
+
+		//Select the coutry bar in all of the charts
+		topicIDEmp="#Emp"+codeISO;
+		d3.selectAll(topicIDEmp)
+			.style("fill","#5E0084");
+
+		topicIDUnemp="#Unemp"+codeISO;
+		d3.selectAll(topicIDUnemp)
+			.style("fill","#5E0084");
+
+		topicIDBroadLabUnder="#BroadLabUnder"+codeISO;
+		d3.selectAll(topicIDBroadLabUnder)
+			.style("fill","#5E0084");
+
+		topicIDEarnQual="#EarnQual"+codeISO;
+		d3.selectAll(topicIDEarnQual)
+			.style("fill","#5E0084");
+
+		topicIDLabMarkSec="#LabMarkSec"+codeISO;
+		d3.selectAll(topicIDLabMarkSec)
+			.style("fill","#5E0084");
+
+		topicIDJobStrain="#JobStrain"+codeISO;
+		d3.selectAll(topicIDJobStrain)
+			.style("fill","#5E0084");
+
+		topicIDLowIncome="#LowIncome"+codeISO;
+		d3.selectAll(topicIDLowIncome)
+			.style("fill","#5E0084");
+
+		topicIDGenderIneq="#GenderIneq"+codeISO;
+		d3.selectAll(topicIDGenderIneq)
+			.style("fill","#5E0084");
+
+		topicIDEmplGap="#EmplGap"+codeISO;
+		d3.selectAll(topicIDEmplGap)
+			.style("fill","#5E0084");
+
+	}
+}
+
+function createRadial(topicSelected){
+	var idTopic="#"+topicSelected;
+	var IDChart="ID"+topicSelected;
+	
+	var radialChart=d3.select(idTopic)
+	    	.append("svg")
+	    	.attr("id",IDChart)
+	    	.attr("width", width)
+	    	.attr("height",width)
+	  		.append("g")
+	    	.attr("class","radialChart")
+	    	.attr("transform", "translate(" + width/2 + "," + width/2 + ")");
+
+	d3.csv("data/data_key.csv", function(error, dataTot) {
+		var data =[];
+		var yTopic="Y"+topicSelected;
+		var evoTopic="evo"+topicSelected;
+
+		 dataTot.forEach(function(d,i) {
+			if(d[topicSelected]!=""){
+				data.push( {
+					ISO:d.ISO,
+	    			Country: d.Country,
+	    			value: d[topicSelected],
+	    			yearData:d[yTopic],
+	    			evoData:d[evoTopic]
+	  			})
+	  		}	
+		});
+
+		
+
+		data.sort(function(a,b) { return parseFloat(b.value) - parseFloat(a.value); });
+
+		//var extent = d3.extent(data, function(d) { return parseFloat(d.value); });
+		var max=d3.max(data, function(d) { return parseFloat(d.value); })
+		var extent = [0,max];
+
+	  	var barScale = d3.scaleLinear()
+	      .domain(extent)
+	      .range([0, barHeight]);
+
+	 	var keys = data.map(function(d,i) { return d.ISO; });
+	  	var numBars = keys.length;
+
+
+	  	var x = d3.scaleLinear()
+	      	.domain(extent)
+	      	.range([0, -barHeight]);
+
+	  	var xAxis = d3.axisLeft()
+	      	.scale(x)
+	      	.ticks(3)
+	      	.tickFormat(formatNumber);
+	
+		radialChart.append("circle")
+	      	.attr("r", barHeight)
+	      	.classed("outer", true)
+	      	.style("fill", "#DDE9EF")
+	      	.style("stroke", "#E9F2F6")
+	      	.style("stroke-width","1.5px");
+
+	  	var arc = d3.arc()
+	      	.startAngle(function(d,i) { return (i * 2 * Math.PI) / numBars; })
+	      	.endAngle(function(d,i) { return ((i + 1) * 2 * Math.PI) / numBars; })
+	      	.innerRadius(0);
+
+
+	    //Create invisible blue segments to ease mouse over
+	  	var arcInvisible = d3.arc()
+	      	.startAngle(function(d,i) { return (i * 2 * Math.PI) / numBars; })
+	      	.endAngle(function(d,i) { return ((i + 1) * 2 * Math.PI) / numBars; })
+	      	.innerRadius(0)
+	      	.outerRadius(barScale(max));
+
+ 	  	var segments_invisible = radialChart.selectAll("path")
+	          .data(data)
+	        .enter().append("path")
+	        .attr("class",function(d){return "invisible_"+pickSector(topicSelected);})
+	        .attr("id",function(d){return "invisible_"+d.ISO;})
+	        .each(function(d) { d.outerRadius = barScale(max); })
+	        .attr("d", arcInvisible)
+	      	.style("fill", "#DDE9EF")
+	      	.style("stroke", "#E9F2F6")
+	      	.style("stroke-width","1px");
+			//.style("pointer-events", "all");	      	
+
+
+		
+		var test=radialChart.append("g")
+
+
+
+
+	  	var segments = test.selectAll("path")
+	          .data(data)
+	        .enter().append("path")
+	        .attr("class",function(d){return pickSector(topicSelected);})
+	        .attr("id",function(d){return topicSelected+d.ISO;})
+	          .each(function(d) { d.outerRadius = 0; })
+	          .style("fill", function (d) { 
+	          	if(d.Country=="OECD")
+	          		return "#0B1E2D";
+	          	else
+	          		return colorScale(pickSector(topicSelected)); })
+	          .attr("opacity",function(d){
+      			return opacityIndicator(data,d.value,d.Country,topicSelected);
+      		})
+	        .attr("d", arc);
+
+	  	segments.transition().ease(d3.easeElastic).duration(1000).delay(function(d,i) {return (25-i)*100;})
+	        .attrTween("d", function(d,index) {
+	            var i = d3.interpolate(d.outerRadius, barScale(+d.value));
+	            return function(t) { d.outerRadius = i(t); return arc(d,index); };
+	        });    
+
+
+
+	  	var circles = radialChart.selectAll("circle")
+	          	.data(x.ticks(3))
+	        	.enter().append("circle")
+	          	.attr("r", function(d) {return barScale(d);})
+	          	.style("fill", "none")
+	          	.style("stroke", "#E9F2F6")
+	          	.style("stroke-dasharray", "2,2")
+	          	.style("stroke-width","1.5px");
+
+
+		var lines = radialChart.selectAll("line")
+	      	.data(keys)
+	    	.enter()
+	    	.append("line")
+	      	.attr("y2", -barHeight - 20)
+	      	.style("stroke", "#E9F2F6")
+	      	.style("stroke-width","1px")
+	      	.attr("transform", function(d, i) { return "rotate(" + (i * 360 / numBars) + ")"; });
+
+		radialChart.append("g")
+		    .attr("class", "x axis")
+		    .call(xAxis);
+
+		// Labels
+		var labelRadius = barHeight * 1.025;
+
+		var labels = radialChart.append("g")
+		    .classed("labels", true);
+
+		labels.append("def")
+		    .append("path")
+	        .attr("id", "label-path")
+	        .attr("d", "m0 " + -labelRadius + " a" + labelRadius + " " + labelRadius + " 0 1,1 -0.01 0");
+
+		labels.selectAll("text")
+		    .data(keys)
+		    .enter().append("text")
+		    .attr("class","radialLabel")
+		    .style("text-anchor", "middle")
+		    .style("font-weight","normal")
+		    //.style("font-size","0.65vw")
+		    .style("fill", function(d, i) {return "#575757";})
+		    .append("textPath")
+		    .attr("xlink:href", "#label-path")
+		    .attr("startOffset", function(d, i) {return i * 100 / numBars + 50 / numBars + '%';})
+		    .text(function(d) {return d.toUpperCase(); });
+
+
+		var classbar="."+pickSector(topicSelected);
+
+		radialChart.selectAll(classbar)
+			.on("mouseover",function(d){
+				d3.select(this)
+				.style("fill","#E31741");
+				var indicator = topicSelected;
+
+				countryName="."+d.Country;
+				countryName=countryName.replace(/\s+/g, '')
+				
+        		countryTitle="#"+d.Country.replace(/\s+/g, '');
+        		var pos4Tooltip="#ID"+topicSelected
+
+			var xPosition = event.pageX-20;
+			var yPosition = event.pageY+15;
+			if (yPosition>window.innerHeight-200)
+				yPosition=yPosition-160;
+
+			//Update the tooltip position and value
+
+
+		     d3.select("#indicTooltip")
+		        .text(function(){
+	            	if (topicSelected=="Emp")
+	            		return "Employment rate (" + d.yearData +")";
+	            	if (topicSelected=="EmpFTI")
+	            		return "Full-time equivalent employment rate (" + d.yearData  +")";
+	            	if (topicSelected=="Unemp")
+	            		return "Unemployment rate (" + d.yearData  +")";
+	            	if (topicSelected=="EarnQual")
+	            		return "Earnings quality (" + d.yearData  +")";
+	            	if (topicSelected=="LabMarkSec")
+	            		return "Labour market insecurity (" + d.yearData  +")" ;
+	            	if (topicSelected=="JobStrain")
+	            		return "Job strain (" + d.yearData  +")" ;
+	            	if (topicSelected=="LongHours")
+	            		return "Very long-hours of work (" + d.yearData  +")" ;
+	            	if (topicSelected=="LowIncome")
+	            		return "Low income rate (" + d.yearData  +")" ;
+	            	if (topicSelected=="GenderIneq")
+	            		return "Gender Labour Income Gap (" + d.yearData  +")" ;
+	            	if (topicSelected=="EmplGap")
+	            		return "Employment gap for disadvantaged groups (" + d.yearData  +")" ;
+
+	            });
+
+		     d3.select("#valueTooltip")
+		        .text(function(){
+	            if (topicSelected=="EarnQual")
+	              return format(d.value) + " USD";
+	            else if  (topicSelected=="EmplGap")
+	              return format(d.value) + "%";
+	            else
+	              return format(d.value) + "%";
+        	});
+
+		     d3.select("#evoTooltip")
+		        .text("Evolutions since 2006: ");
+
+		     var evolutionPoint=d.evoData;
+		     d3.select("#imageTooltip")
+		        .attr("src",function(d){
+		        	if(evolutionPoint=="down")
+						return "img/arrow-with-circle-down.png";
+			    else if (evolutionPoint=="up")
+					return "img/arrow-with-circle-up.png";
+			    else if (evolutionPoint=="stable")
+					return "img/arrow-with-circle-right.png";
+				else
+					return "img/dots-three-horizontal.png";
+		        })
+
+
+
+
+
+			d3.select("#countryTooltipSetUP")
+		        .style("left", xPosition + "px")
+		        .style("top", yPosition + "px") 
+		        .select("#countryTooltip")
+		        .text(d.Country);
+
+			d3.select("#countryTooltipSetUP").classed("hidden", false);
+
+		       
+		        
+
+			})
+			.on("mouseout",function(d){
+
+				var e = document.getElementById("dropDownButton");
+				var selectedCou = e.options[e.selectedIndex].value;
+
+				d3.select(this)
+				.style("fill",function (d) { 
+					if(d.ISO==selectedCou)
+	          			return "#5E0084";
+
+	          		else if(d.Country=="OECD")
+	          			return "#0B1E2D";
+	          		else
+	          			return colorScale(pickSector(topicSelected)); });
+		       
+				
+				var indicator = topicSelected;
+
+	            //Hide the tooltip
+				d3.select("#countryTooltipSetUP").classed("hidden", true);	            
+
+
+			})
+			.on("click",function(d){
+				document.getElementById("dropDownButton").value = d.ISO;
+				highlightCountry(d.ISO)
+			})
+		//Mouse over the hidden blue country bars 
+
+		var classinvisiblebar=".invisible_"+pickSector(topicSelected);
+
+		radialChart.selectAll(classinvisiblebar)
+			.on("mouseover",function(d){
+				var idSel="#"+topicSelected+(this.id).split(/[_]+/)[1]
+				
+				d3.select(idSel)
+				//.selectAll(idSel)
+				.style("fill","#E31741");
+				var indicator = topicSelected;
+
+				countryName="."+d.Country;
+				countryName=countryName.replace(/\s+/g, '')
+				
+        		countryTitle="#"+d.Country.replace(/\s+/g, '');
+        		var pos4Tooltip="#ID"+topicSelected
+
+
+		       
+			var xPosition = event.pageX-20;
+			var yPosition = event.pageY+15;
+			if (yPosition>window.innerHeight-200)
+				yPosition=yPosition-160;
+
+			//Update the tooltip position and value
+
+
+		     d3.select("#indicTooltip")
+		        .text(function(){
+	            	if (topicSelected=="Emp")
+	            		return "Employment rate (" + d.yearData +")";
+	            	if (topicSelected=="BroadLabUnder")
+	            		return "Broad labour underutilisation (" + d.yearData  +")";
+	            	if (topicSelected=="Unemp")
+	            		return "Unemployment rate (" + d.yearData  +")";
+	            	if (topicSelected=="EarnQual")
+	            		return "Earnings quality (" + d.yearData  +")";
+	            	if (topicSelected=="LabMarkSec")
+	            		return "Labour market insecurity (" + d.yearData  +")" ;
+	            	if (topicSelected=="JobStrain")
+	            		return "Job strain (" + d.yearData  +")" ;
+	            	if (topicSelected=="LongHours")
+	            		return "Very long-hours of work (" + d.yearData  +")" ;
+	            	if (topicSelected=="LowIncome")
+	            		return "Low income rate (" + d.yearData  +")" ;
+	            	if (topicSelected=="GenderIneq")
+	            		return "Gender Labour Income Gap (" + d.yearData  +")" ;
+	            	if (topicSelected=="EmplGap")
+	            		return "Employment gap for disadvantaged groups (" + d.yearData  +")" ;
+
+	            });
+
+		     d3.select("#valueTooltip")
+		        .text(function(){
+	            if (topicSelected=="EarnQual")
+	              return format(d.value) + " USD";
+	            else if  (topicSelected=="EmplGap")
+	              return format(d.value) + "%";
+	            else
+	              return format(d.value) + "%";
+        	});
+
+		     d3.select("#evoTooltip")
+		        .text("Evolutions since 2006: ");
+
+		     var evolutionPoint=d.evoData;
+		     d3.select("#imageTooltip")
+		        .attr("src",function(d){
+		        	if(evolutionPoint=="down")
+						return "img/arrow-with-circle-down.png";
+			    else if (evolutionPoint=="up")
+					return "img/arrow-with-circle-up.png";
+			    else if (evolutionPoint=="stable")
+					return "img/arrow-with-circle-right.png";
+				else
+					return "img/dots-three-horizontal.png";
+		        })
+
+
+
+
+
+			d3.select("#countryTooltipSetUP")
+		        .style("left", xPosition + "px")
+		        .style("top", yPosition + "px") 
+		        .select("#countryTooltip")
+		        .text(d.Country);
+
+			d3.select("#countryTooltipSetUP").classed("hidden", false);
+
+		       
+		        
+
+			})
+			.on("mouseout",function(d){
+
+				var e = document.getElementById("dropDownButton");
+				var selectedCou = e.options[e.selectedIndex].value;
+
+				d3.select(this)
+				.style("fill",function (d) { 
+					if(d.ISO==selectedCou)
+	          			return "#5E0084";
+
+	          		else if(d.Country=="OECD")
+	          			return "#0B1E2D";
+	          		else
+	          			return colorScale(pickSector(topicSelected)); });
+		       
+				
+				var indicator = topicSelected;
+
+	            //Hide the tooltip
+				d3.select("#countryTooltipSetUP").classed("hidden", true);			        
+
+			})
+			.on("mouseout",function(d){
+
+				var e = document.getElementById("dropDownButton");
+				var selectedCou = e.options[e.selectedIndex].value;
+
+				var idSel="#"+topicSelected+(this.id).split(/[_]+/)[1]
+				d3.select(idSel)
+				.style("fill",function (d) { 
+					if(d.ISO==selectedCou)
+	          			return "#5E0084";
+
+	          		else if(d.Country=="OECD")
+	          			return "#0B1E2D";
+	          		else
+	          			return colorScale(pickSector(topicSelected)); });
+		       
+				
+				var indicator = topicSelected;
+
+	            //Hide the tooltip
+				d3.select("#countryTooltipSetUP").classed("hidden", true);	            
+
+			})
+
+			.on("click",function(d){
+				document.getElementById("dropDownButton").value = d.ISO;
+				highlightCountry(d.ISO)
+			});
+
+		var e = document.getElementById("dropDownButton");
+		var selectedCou = e.options[e.selectedIndex].value;
+
+		(highlightCountry(selectedCou),10000);
+	});
+};
+
+
+
+createRadial("Emp");
+createRadial("Unemp");
+createRadial("BroadLabUnder");
+createRadial("EarnQual");
+createRadial("LabMarkSec");
+createRadial("JobStrain");
+createRadial("LowIncome");
+createRadial("GenderIneq");
+createRadial("EmplGap");
+
+
+
+function setupButtons() {
+    d3.select('#toolbar')
+      .selectAll('.button')
+      .on('click', function () {
+        // Remove active class from all buttons
+        d3.selectAll('.button').classed('active', false);
+        // Find the button just clicked
+        var button = d3.select(this);
+
+        // Set it as the active button
+        button.classed('active', true);
+
+        // Get the id of the button
+        var buttonId = button.attr('id');
+		if (buttonId== "radial")
+		window.open("index_radial.html", "_self")
+		else if (buttonId== "table")
+		window.open("index_table.html", "_self")
+
+
+		else if (buttonId== "comparison")
+		window.open("index.html", "_self")
+        // Toggle the bubble chart based on
+        // the currently clicked button.
+        //draw(buttonId);
+      });
+  }  
+    
+  setupButtons();
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-51983915-1', 'auto');
+  ga('send', 'pageview');
+
+</script>

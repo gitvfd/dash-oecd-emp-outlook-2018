@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style type="text/css">
+
+body{
+  background:#EDF8F6;  
+  margin-left: 5%;
+  margin-right:5%;
+}
+
+.title{
+  font:TheSerif;
+  font-size: 20px;
+  color:#8EA4B1;
+
+  margin-top:2px;
+  margin-bottom:1px;
+}
+
+#intro{
+clear: both; float: left; display: block; position: relative;
+  font:TheSerif;
+  font-size: 18px;
+  font-style:italic;
+  color:#575757;
+  margin-top:5px;
+  margin-bottom:10px;
+    display: inline-block;
+}
+
+#source{
+
+  font:TheSerif;
+  font-style: normal;
+  font-size: 12px;
+  color:#575757;
+}
+/* --- Tooltip --- */
+
+.tooltip-wrapper {
+  pointer-events: none;
+  text-anchor: middle;
+  text-shadow: 0 1px 3px white, 1px 0 3px white, -1px 0 3px white, 0 -1px 3px white;
+}
+
+
+.tooltip-background {
+  fill: #ededed;
+  opacity: 0.9;
+}
+
+}
+.tooltip-country {
+  font-family: 'TheSerif', sans-serif;
+  font-size: 17px;
+}
+
+.tooltip-dim {
+  font-family: 'TheSerif', sans-serif;
+  font-size: 11px;
+}
+
+.tooltip-value {
+  font-size: 12px;
+}
+
+.tooltip-evo {
+  font-size: 12px;
+}
+
+
+.tooltipTitle {
+  position: absolute;
+  text-align: center;
+  width: auto;
+  height: auto;
+  padding: 8px;
+  margin-top: -20px;
+  font: 10px sans-serif;
+  /**background: #ddd;**/
+  background:#ededed;
+  opacity:0.9;
+  pointer-events: none;
+}
+
+/* --- viz --- */
+
+#div text {
+  fill: white;
+  font: 10px sans-serif;
+  text-anchor: end;
+  -webkit-font-smoothing: antialiased;
+}
+
+.Name{
+	font-family: TheSerif;
+	font-size:0.9vw;
+	fill: #0B1E2D;
+  -webkit-font-smoothing: antialiased;
+}
+
+.headingTitleBox {
+stroke:none;
+stroke-width:1px;
+
+}
+
+.headingTitle {
+	font-family: TheSerif;
+	font-weight: 400;
+	/**font-size:12px;**/
+	font-size:0.9vw;
+	color:#0B1E2D;
+  background:none;
+  word-wrap: break-word;
+  -webkit-font-smoothing: antialiased;
+}
+
+.text-headingTitle{
+  /**font-family: TheSerif;
+  font-weight: 400;
+  /**font-size:12px;**/
+  font-size:1vw;
+  color:#0B1E2D;
+  word-wrap: break-word;
+  -webkit-font-smoothing: antialiased;
+  text-anchor: start;
+  alignment-baseline: text-before-edge;
+}
+
+#toolbar{
+    display: inline-block;
+}
+
+.button{
+ min-width: 130px;
+  padding: 4px 5px;
+  cursor: pointer;
+  text-align: center;
+  font: 14px  TheSerif, Helvetica, Arial, sans-serif;
+  font-weight:400;
+  float:left;
+  margin: 2px 5px 2px 5px;
+  color:#464646;
+  border: 1px solid #e0e0e0;
+}
+
+.button.active {
+  background: #8EA4B1;
+  color: #fff;
+}
+
+</style>
+<!--<div>Sort by: 
+<select id="dropDownButton" onchange="sortChart(this.value)";>
+  <option value="Emp" selected="selected">Employment</option>
+  <option value="EmpFTI" >Employment in full-time equivalent units</option>
+  <option value="Unemp" >Unemployment</option>
+  <option value="EarnQual" >Earnings quality</option>
+  <option value="LabMarkSec" >Labour market insecurity</option>
+  <option value="JobStrain" >Job strain</option>
+  <option value="LongHours" >Very long hours of work</option>
+  <option value="LowIncome" >Low income rate</option>
+  <option value="GenderIneq" >Gender income inequality</option>
+  <option value="EmplGap" >Employment gap for disadvantaged groups</option>
+</select>
+</div>
+</Br>-->
+
+<body id="page">
+<div class="title">
+  Scoreboard of labour market performance 
+</div>
+<Br/>
+<div id="toolbar">
+<div class="button " id="comparison">Country position </div>
+<div class="button active" id="table">Dashboard </div>
+<div class="button  " id="radial">Infographic </div>
+</div>
+<Br/>
+<div id="intro">The lighter the shading for a country the worse it performs for the given indicators.</div>
+<Br/>
+<div id="legend"></div>
+<div id="title"></div>
+<div id="viz"></div>
+<Br/>
+<div id="source">For further details on definitions and sources, refer to Chapter 1 of the <a href="http://dx.doi.org/10.1787/empl_outlook-20178-en" target="_blank">OECD Employment Outlook 2018</a>.</div>
+<div id="source">Download the data <a href="http://www.oecd.org/employment/emp/Labour-market-performance-scoreboard.xlsx">here</a>.</div>
+</body>
+<script src="libs/d3.v4.min.js"></script>
+<script src="libs/modernizr.js"></script>
+<!-- jQuery 
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+<script src="js/start.js"></script>
+<script src="js/sortData.js"></script>
+<script src="js/colorOpacity.js"></script>
+<script>
+
+	var numberIndicators= 10; // 10 indicators + 1 dimensions for names
+	var barHeight = window.innerHeight/75;
+	var format = d3.format(",.1f");
+  var margin = 10,
+  overallwidth,height;
+  overallwidth = document.getElementById("viz").offsetWidth,
+  height=  window.innerHeight;
+  var limit= 35*window.innerHeight/75; // max height after which part of the tooltip is hidden
+
+    
+  var width=overallwidth/numberIndicators;
+
+
+  var div = d3.select("#title").append("div")
+        .attr("class", "tooltipTitle")
+        .style("display", "none");
+
+
+	/////////////////////////////////////
+	/////////////////////////////////////
+	/** SET Scales for each indicator **/
+	/////////////////////////////////////
+	/////////////////////////////////////
+
+    var xEmp = d3.scaleLinear()
+    	.range([0, width-2*margin]);
+
+    var xBroadLabUnder = d3.scaleLinear()
+    	.range([0, width-2*margin]);
+
+    var xUnemp = d3.scaleLinear()
+    	.range([0, width-2*margin]);
+
+    var xEarnQual = d3.scaleLinear()
+    	.range([0, width-2*margin]);
+
+    var xLabMarkSec = d3.scaleLinear()
+    	.range([0, width-2*margin]);
+
+    var xJobStrain = d3.scaleLinear()
+    	.range([0, width-2*margin]);
+
+    /**var xLongHours = d3.scaleLinear()
+    	.range([0, width-2*margin]);**/
+
+    var xLowIncome = d3.scaleLinear()
+    	.range([0, width-2*margin]);
+
+    var xGenderIneq = d3.scaleLinear()
+    	.range([0, width-2*margin]);
+
+    var xEmplGap = d3.scaleLinear()
+    	.range([0, width-2*margin]);
+
+
+	/////////////////////////////////////
+	/////////////////////////////////////
+	/**    SET color for sectors      **/
+	/////////////////////////////////////
+	/////////////////////////////////////
+
+	var colorScale = d3.scaleOrdinal()
+	    .range(["#EDF8F6","#00B7B5","#EF9200","#00B26C"])
+	    .domain(["","Quantity", "Quality","Inclusiveness"]);
+
+
+	/////////////////////////////////////
+	/////////////////////////////////////
+	/**    SET color for sectors      **/
+	/////////////////////////////////////
+	/////////////////////////////////////
+
+	function assignSector(indicator){
+    	if (indicator=="Emp")
+    		return "Quantity";
+    	if (indicator=="BroadLabUnder")
+    		return "Quantity";
+    	if (indicator=="Unemp")
+    		return "Quantity";
+    	if (indicator=="EarnQual")
+    		return "Quality" ;
+    	if (indicator=="LabMarkSec")
+    		return "Quality" ;
+    	if (indicator=="JobStrain")
+    		return "Quality" ;
+    	/**if (indicator=="LongHours")
+    		return "Quality" ;**/
+    	if (indicator=="LowIncome")
+    		return "Inclusiveness" ;
+    	if (indicator=="GenderIneq")
+    		return "Inclusiveness" ;
+    	if (indicator=="EmplGap")
+    		return "Inclusiveness" ;
+	}
+/////////////////////////////////////
+/////////////////////////////////////
+/**        Set up SVGs            **/
+/////////////////////////////////////
+/////////////////////////////////////
+
+
+    var chart = d3.select("#viz")
+    	.append("svg")
+    	.attr("width", overallwidth);
+
+    var title = d3.select("#title")
+    	.append("svg")
+    	.attr("width", overallwidth)
+    	.attr("height",window.innerHeight/7.5);
+
+
+    var legend = d3.select("#legend")
+    	.append("svg")
+    	.attr("width", overallwidth)
+    	.attr("height",window.innerHeight/20);
+
+
+
+/////////////////////////////////////
+/////////////////////////////////////
+/**         Add Titles            **/
+/////////////////////////////////////
+/////////////////////////////////////
+
+	function addTitle(){
+
+		var headerNames= d3.keys(data_sort[0]);
+
+		d3.json("data/def.json",function(data){
+			var headers = title.selectAll("g")
+				.data(data)
+	    		.enter()
+	    		.append("g")
+          .attr("class",function(d){
+            return d.code;
+          })
+	    		.attr("transform", function(d, i) { return "translate("+ i*width +"," + margin + ")"; });
+
+
+	    		headers.append("rect")
+	    		.attr("class",function(d){
+	    			return d.code +" "+"headingTitleBox";
+	    		})
+	    		.attr("width",width-2*margin)
+	    		.attr("height","5.5em")
+	    		.attr("fill",function(d){
+	    			return colorScale(d.Sector)
+	    		})
+	    		.attr("opacity",0.65);
+
+
+        var Titles;
+        
+        if (!Modernizr.svgforeignobject) {
+
+          Titles = headers.append("text")
+            .attr("class","headingTitle")
+
+            .append('tspan')
+            .attr('x', 0)
+            .attr('y', "1em")
+            .attr('width', width-2*margin)
+            .attr('height', window.innerHeight/10)
+            .text(function(d,i) { return d.Indicator.split(" ")[0];})
+            .append('tspan')
+            .attr('x', 0)
+            .attr('y', "2em")
+            .attr('width', width-2*margin)
+            .attr('height', window.innerHeight/10)
+            .text(function(d,i) { return d.Indicator.split(" ")[1];})
+            .append('tspan')
+            .attr('x', 0)
+            .attr('y', "3em")
+            .attr('width', width-2*margin)
+            .attr('height', window.innerHeight/10)
+            .text(function(d,i) { return d.Indicator.split(" ")[2];})
+            .append('tspan')
+            .attr('x', 0)
+            .attr('y', "4em")
+            .attr('width', width-2*margin)
+            .attr('height', window.innerHeight/10)
+            .text(function(d,i) { return d.Indicator.split(" ")[3];})
+            .append('tspan')
+            .attr('x', 0)
+            .attr('y', "5em")
+            .attr('width', width-2*margin)
+            .attr('height', window.innerHeight/10)
+            .text(function(d,i) { return d.Indicator.split(" ")[4];});        
+
+
+
+        }else{
+          Titles = headers.append('foreignObject')
+            .attr("class","headingTitle")
+            //.attr('x', 0)
+            //.attr('y', 0)
+            .attr('width', width-2*margin)
+            .attr('height', "6em")
+            //.attr("requiredFeatures","http://www.w3.org/1999/xhtml")
+            .append("xhtml:body")
+            //.attr("xmlns","http://www.w3.org/1999/xhtml")
+//.append("p")
+            .attr("class","headingTitle")
+            .text(function(d,i) { return d.Indicator; });
+        }
+
+        headers.append("image")
+            .attr('x', 0.98*(width-2*margin)-width/5)
+            .attr('y', "4em")
+            .attr("xlink:href",function(d){
+              if(d.code!="cou")
+                return "img/chevron-small-down.svg";})
+            .attr("fill","#979797")
+            .attr("width", width/5)
+            .attr("height", width/5)
+
+				headers.selectAll("foreignObject")
+	      			.on("mouseover", mouseoverTitle)
+	      			.on("mousemove", mousemoveTitle)
+	      			.on("mouseout", mouseoutTitle);
+
+
+        headers.selectAll("rect")
+          .on("click",function(d){
+            if(d.code !="cou")
+              sortChart(d.code)
+          });
+
+        headers.selectAll("foreignObject")
+          .on("click",function(d){
+            if(d.code !="cou")
+              sortChart(d.code)
+          });
+
+
+        headers.selectAll("image")
+          .on("click",function(d){
+            if(d.code !="cou")
+              sortChart(d.code)
+          });         
+
+    });
+
+
+	}
+
+
+
+/////////////////////////////////////
+/////////////////////////////////////
+/**         Title Tooltip         **/
+/////////////////////////////////////
+/////////////////////////////////////
+
+
+    function mouseoverTitle() {
+      div.style("display", "inline");
+    }
+
+    function mousemoveTitle(d,i) {
+
+      div.html("<div style='font-size: 11px; text-align: center;'><span style='font-weight:bold'>" + d.Indicator + "</span><br/><span><i>"+ d.Definition+ "</i><span ></div>")
+          .style("left", (d3.event.pageX)-20 + "px")
+          .style("top", (d3.event.pageY) + 10 + "px");
+    }
+
+    function mouseoutTitle() {
+      div.style("display", "none");
+    }
+
+
+
+/////////////////////////////////////
+/////////////////////////////////////
+/**         Add Legend            **/
+/////////////////////////////////////
+/////////////////////////////////////
+function addLegend(){
+
+  var incremental=0;
+  var pos=0;
+
+	d3.json("data/sector.json",function(data){
+		var legends = legend.selectAll("g")
+			.data(data)
+    		.enter()
+    		.append("g")
+    		.attr("transform", function(d, i) { 
+          pos= "translate("+ (width+ incremental*width) +"," + margin + ")"
+          incremental=incremental+d.NumberInd;
+          return pos 
+
+        });
+
+		legends.append("rect")
+    		.attr("width",function(d){ return d.NumberInd*width -2*margin;})
+    		.attr("height",window.innerHeight/25)
+    		.attr("fill",function(d){
+    			return colorScale(d.Sector)
+    		})
+    		.attr("opacity",1);
+
+		legends.append("text")
+    		.attr("x",width/5)
+    		.attr("y",window.innerHeight/40)
+    		.attr("fill","#ffffff")
+    		.attr("opacity",1)
+    		.attr("font-size","1.3vw")
+    		.text(function(d){return d.Sector});
+	})
+}
+	d3.csv('data/data_key.csv', start);
+
+function setupButtons() {
+    d3.select('#toolbar')
+      .selectAll('.button')
+      .on('click', function () {
+        // Remove active class from all buttons
+        d3.selectAll('.button').classed('active', false);
+        // Find the button just clicked
+        var button = d3.select(this);
+
+        // Set it as the active button
+        button.classed('active', true);
+
+        // Get the id of the button
+        var buttonId = button.attr('id');
+        if (buttonId== "radial")
+          window.open("index_radial.html", "_self")
+        else if (buttonId== "table")
+        window.open("index_table.html", "_self")
+
+
+        else if (buttonId== "comparison")
+          window.open("index.html", "_self")
+        // Toggle the bubble chart based on
+        // the currently clicked button.
+        //draw(buttonId);
+      });
+  }  
+    
+  setupButtons();
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-51983915-1', 'auto');
+  ga('send', 'pageview');
+
+</script>

@@ -1,0 +1,62 @@
+[
+{
+   "Indicator": "Country",
+   "code":"cou",
+   "Sector": "",
+   "Definition": ""
+ },
+ {
+   "Indicator": "Employment rate",
+   "code":"Emp",
+   "Sector": "Quantity",
+   "Definition": "Share of working-age population (20-64 years) in employment (%) (2016)"
+ },
+ {
+   "Indicator": "Unemployment rate",
+   "code":"Unemp",
+   "Sector": "Quantity",
+   "Definition": "Share of persons in the labour force (15-64 years) in unemployment (%) (2016)"
+ },
+ {
+   "Indicator": "Broad labour underutilisation",
+   "code":"BroadLabUnder",
+   "Sector": "Quantity",
+   "Definition": "Share of inactive, unemployed or involuntary part-timers (15-64) in population (%), excluding youth (15-29) in education and not in employment (2015)"
+ },
+ {
+   "Indicator": "Earnings quality",
+   "code":"EarnQual",
+   "Sector": "Quality",
+   "Definition": "Gross hourly earnings in USD adjusted for inequality (2015)"
+ },
+ {
+   "Indicator": "Labour market insecurity",
+   "code":"LabMarkSec",
+   "Sector": "Quality",
+   "Definition": "Expected monetary loss associated with becoming and staying unemployed as a share of previous earnings (%) (2016)"
+ },
+ {
+   "Indicator": "Job strain",
+   "code":"JobStrain",
+   "Sector": "Quality",
+   "Definition": "Share of workers experiencing job strain (2015)"
+ },
+ {
+   "Indicator": "Low income rate",
+   "code":"LowIncome",
+   "Sector": "Inclusiveness",
+   "Definition": "Share of working age persons (18-65 years) living with less than 50% of median equivalised household disposable income (2015)"
+ },
+ {
+   "Indicator": "Gender labour income gap",
+   "code":"GenderIneq",
+   "Sector": "Inclusiveness",
+   "Definition": "Difference between average annual labour income of men and women divided by average labour income of men (%) (2015)"
+ },
+ {
+   "Indicator": "Employment gap for disadvantaged groups",
+   "code":"EmplGap",
+   "Sector": "Inclusiveness",
+   "Definition": "Average employment gap as a percentage of the benchmark group (prime-age male workers) (2016)"
+ }
+]
