@@ -220,7 +220,7 @@ height:15px;
 </style>
 <body id="page">
 <div class="title">
-	Scoreboard of labour market performance 
+	Dashboard of job quantity, job quality and inclusiveness 
 </div>
 <Br/>
 <div id="toolbar">
@@ -347,7 +347,7 @@ height:15px;
 </div>
 <Br/>
 <div id="source">For further details on definitions and sources, refer to Chapter 1 of the <a href="http://dx.doi.org/10.1787/empl_outlook-2018-en" target="_blank">OECD Employment Outlook 2018</a>.</div>
-<div id="source">Download the data <a href="http://www.oecd.org/employment/emp/Labour-market-performance-scoreboard.xlsx">here</a>.</div>
+<div id="source">Download the data <a href="http://www.oecd.org/employment/emp/JobQuantity-JobQuality-Inclusiveness-indicators.xlsx">here</a>.</div>
 <div id="countryTooltipSetUP" class="hidden">
               <p><span id="countryTooltip">All</span></p><Br/>
 
@@ -595,12 +595,16 @@ console.log(evolutionPoint)
 					return "img/dots-three-horizontal.png";
 		        })**/
 		        .text(function(){
-		            if (topicSelected=="EarnQual")
-		              return format(evolutionPoint) + " USD";
-		            else if  (topicSelected=="EmplGap")
-		              return format(evolutionPoint) + " percentage points";
-		            else
-		              return format(evolutionPoint) + " percentage points";
+		        	if (evolutionPoint==""){
+		        		return "..";
+		        	}else{
+			            if (topicSelected=="EarnQual")
+			              return format(evolutionPoint) + " USD";
+			            else if  (topicSelected=="EmplGap")
+			              return format(evolutionPoint) + " percentage points";
+			            else
+			              return format(evolutionPoint) + " percentage points";
+			          	}
 	        	});
 
 
