@@ -236,7 +236,7 @@
 	      .attr("x", 0)
 	      .attr("y", 10)
 	      .attr("width", 0)
-	      .attr("height", 105);
+	      .attr("height", 125);
 	    
 	    var tooltipCountry = tooltipWrapper.append("text")
 	      .attr("class", "tooltip-country")
@@ -262,13 +262,18 @@
         .attr("y", 85)
         .text("");
 
-      var tooltipEvoArrow= tooltipWrapper.append("image")
+      /**var tooltipEvoArrow= tooltipWrapper.append("image")
         .attr("class", "tooltip-evo-arrow")
         .attr("id", "tooltipEvoArrow")
         .attr("x", 0)
         .attr("y", 90)
         .attr("width", "20")
-        .attr("height", "20");
+        .attr("height", "20");**/
+      var tooltipEvoArrow = tooltipWrapper.append("text")
+        .attr("class", "tooltip-value-evo")
+        .attr("id", "tooltipEvoArrow")
+        .attr("y", 100)
+        .text("");
 
 	    ///////////////////////////////////////////////////////////////////////////
 	    ////////////////////////////// End Tooltip ////////////////////////////////
@@ -301,8 +306,8 @@
 				tooltipDim.text(function(d){
 	            	if (indicator=="Emp")
 	            		return "Employment (" + yearToolTip +")";
-	            	if (indicator=="EmpFTI")
-	            		return "Employment in full-time equivalent units (" + yearToolTip +")";
+	            	if (indicator=="BroadLabUnder")
+	            		return "Broad labour underutilisation (" + yearToolTip +")";
 	            	if (indicator=="Unemp")
 	            		return "Unemployment (" + yearToolTip +")";
 	            	if (indicator=="EarnQual")
@@ -337,15 +342,22 @@
         tooltipEvo.text("Evolution since 2006" );//+ d[evoCode] );
     
 
-    if(d[evoCode]=="down")
+    /**if(d[evoCode]=="down")
       tooltipEvoArrow.attr("xlink:href", "img/arrow-with-circle-down.svg")
     else if (d[evoCode]=="up")
       tooltipEvoArrow.attr("xlink:href", "img/arrow-with-circle-up.svg")
     else if (d[evoCode]=="stable")
       tooltipEvoArrow.attr("xlink:href", "img/arrow-with-circle-right.svg")
     else
-      tooltipEvoArrow.attr("xlink:href", "img/dots-three-horizontal.svg")
-
+      tooltipEvoArrow.attr("xlink:href", "img/dots-three-horizontal.svg")**/
+      tooltipEvoArrow.text(function(){
+                if (indicator=="EarnQual")
+                  return format(d[evoCode]) + " USD";
+                else if  (indicator=="EmplGap")
+                  return format(d[evoCode]) + "percentage points";
+                else
+                  return format(d[evoCode]) + "percentage points";
+            });
 
         //Find the largest title
         var maxSize = Math.max(document.getElementById("tooltipDim").getComputedTextLength(), document.getElementById("tooltipValue").getComputedTextLength(),document.getElementById("tooltipCountry").getComputedTextLength(),document.getElementById("tooltipEvo").getComputedTextLength());

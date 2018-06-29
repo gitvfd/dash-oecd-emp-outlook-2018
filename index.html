@@ -355,7 +355,9 @@ height:15px;
               <p><span id="valueTooltip">All</span></p><Br/>
               <p><span id="evoTooltip">All</span></p>
 
-              <p><img id="imageTooltip" src="img/arrow-with-circle-down.png"></img></p><Br/>
+              <p><!--<img id="imageTooltip" src="img/arrow-with-circle-down.png"></img>-->
+              	<span id="imageTooltip"></span>
+              </p><Br/>
 </div>
 </body>
 <script src="libs/d3.v4.min.js"></script>
@@ -577,10 +579,12 @@ test="#"+topicSelected;
 
 		     d3.select("#evoTooltip")
 		        .text("Evolutions since 2006: ");
-
 		     var evolutionPoint=d.evoData;
+
+console.log(evolutionPoint)
+		     
 		     d3.select("#imageTooltip")
-		        .attr("src",function(d){
+		        /**.attr("src",function(d){
 		        	if(evolutionPoint=="down")
 						return "img/arrow-with-circle-down.png";
 			    else if (evolutionPoint=="up")
@@ -589,8 +593,15 @@ test="#"+topicSelected;
 					return "img/arrow-with-circle-right.png";
 				else
 					return "img/dots-three-horizontal.png";
-		        })
-
+		        })**/
+		        .text(function(){
+		            if (topicSelected=="EarnQual")
+		              return format(evolutionPoint) + " USD";
+		            else if  (topicSelected=="EmplGap")
+		              return format(evolutionPoint) + "percentage points";
+		            else
+		              return format(evolutionPoint) + "percentage points";
+	        	});
 
 
 
