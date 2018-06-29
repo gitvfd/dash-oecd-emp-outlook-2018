@@ -351,12 +351,17 @@
     else
       tooltipEvoArrow.attr("xlink:href", "img/dots-three-horizontal.svg")**/
       tooltipEvoArrow.text(function(){
+
+              if (d[evoCode]==""){
+                return "..";
+              }else{
                 if (indicator=="EarnQual")
                   return format(d[evoCode]) + " USD";
                 else if  (indicator=="EmplGap")
                   return format(d[evoCode]) + " percentage points";
                 else
                   return format(d[evoCode]) + " percentage points";
+              }
             });
 
         //Find the largest title
