@@ -354,9 +354,9 @@
                 if (indicator=="EarnQual")
                   return format(d[evoCode]) + " USD";
                 else if  (indicator=="EmplGap")
-                  return format(d[evoCode]) + "percentage points";
+                  return format(d[evoCode]) + " percentage points";
                 else
-                  return format(d[evoCode]) + "percentage points";
+                  return format(d[evoCode]) + " percentage points";
             });
 
         //Find the largest title
