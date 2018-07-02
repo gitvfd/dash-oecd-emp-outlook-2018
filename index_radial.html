@@ -190,8 +190,10 @@ margin-top: :5px;
 }
 
 #imageTooltip{
-width:15px;
-height:15px;
+/**width:15px;
+height:15px;**/
+
+  font-size: 12px;
 }
 
 @media screen and  (max-width: 800px) {
@@ -731,10 +733,7 @@ function createRadial(topicSelected){
 		        .text("Evolutions since 2006: ");
 
 		     var evolutionPoint=d.evoData;
-		     console.log(d)
-		     console.log(evolutionPoint)
 
-		     console.log(topicSelected)
 		     d3.select("#imageTooltip")
 		        /**.attr("src",function(d){
 		        	if(evolutionPoint=="down")
@@ -870,8 +869,9 @@ function createRadial(topicSelected){
 		        .text("Evolutions since 2006: ");
 
 		     var evolutionPoint=d.evoData;
+		     
 		     d3.select("#imageTooltip")
-		        .attr("src",function(d){
+		        /**.attr("src",function(d){
 		        	if(evolutionPoint=="down")
 						return "img/arrow-with-circle-down.png";
 			    else if (evolutionPoint=="up")
@@ -880,8 +880,19 @@ function createRadial(topicSelected){
 					return "img/arrow-with-circle-right.png";
 				else
 					return "img/dots-three-horizontal.png";
-		        })
-
+		        })**/
+		        .text(function(){
+		        	if (evolutionPoint==""){
+		        		return "..";
+		        	}else{
+			            if (topicSelected=="EarnQual")
+			              return format(evolutionPoint) + " USD";
+			            else if  (topicSelected=="EmplGap")
+			              return format(evolutionPoint) + " percentage points";
+			            else
+			              return format(evolutionPoint) + " percentage points";
+			          	}
+	        	});
 
 
 
